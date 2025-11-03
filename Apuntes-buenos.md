@@ -168,7 +168,9 @@ int main() {
 ```  
 
 **Salida:**
-
+Antes de fork: 0
+PADRE - Contador: 2
+HIJO - Contador: 2
 
 ---
 
@@ -300,3 +302,9 @@ Process proceso = Runtime.getRuntime().exec(comando);
 
 // Con gestión
 int resultado = proceso.waitFor();
+```
+🔄 Iniciando proceso secundario...
+🚀 Proceso secundario ejecutándose...
+✅ Procesamiento completado con éxito
+✅ Proceso se completó satisfactoriamente
+➡️ Ejecutando siguiente proceso en cadena...
