@@ -96,16 +96,20 @@ Concurrencia: tareas alternan en un núcleo. Paralelismo: tareas simultáneas en
 ## 📗 RESUMEN DETALLADO (Parte importante)
 
 **Computación Concurrente:**
-- Contexto: 1 núcleo
-- Mecanismo: Time-slicing (reparto de tiempo)
-- Resultado: Ilusión de simultaneidad
-- Responsable: Sistema Operativo
+- Ejecución en sistemas mononúcleo mediante time-slicing
+- El SO alterna rápidamente entre procesos
+- Crea ilusión de simultaneidad
+- Responsabilidad principal del sistema operativo
 
 **Computación Paralela:**
-- Contexto: Múltiples núcleos
-- Mecanismo: Ejecución simultánea
-- Resultado: Simultaneidad real
-- Responsable: SO + Programador
+- Ejecución real simultánea en múltiples núcleos
+- Divide procesos en hilos que se ejecutan en paralelo
+- Reduce tiempos de ejecución
+- Responsabilidad compartida: SO + programador
+
+**Definiciones clave:**
+- **Procesamiento concurrente**: Varios procesos se ejecutan alternativamente en una misma unidad de proceso
+- **Procesamiento paralelo**: Divisiones de un proceso se ejecutan simultáneamente en diversos núcleos
 
 **Tabla Comparativa:**
 | Aspecto | Concurrencia | Paralelismo |
@@ -260,13 +264,13 @@ HIJO - Contador: 2
 
 ## 📘 RESUMEN + TABLA
 
-Coordinación de ejecución de procesos según sus resultados.
+La sincronización permite coordinar la ejecución de procesos según sus resultados y códigos de terminación. Es esencial para construir flujos de trabajo donde la ejecución de un proceso depende del resultado de otro.
 
 **Mecanismos necesarios:**
 - Ejecución de procesos desde otros procesos
-- Espera de finalización de procesos
-- Generación de códigos de terminación
-- Obtención de códigos de terminación
+- Espera de finalización 
+- Generación y obtención de códigos de terminación
+- Toma de decisiones basada en resultados
 
 ### 📋 TABLA 1.1 - MECANISMOS JAVA
 
@@ -292,6 +296,24 @@ Coordinación de ejecución de procesos según sus resultados.
 # 1.3.1 CREACIÓN DE PROCESOS CON RUNTIME
 
 ## 📗 RESUMEN DETALLADO (Parte importante) + TABLA
+**Clase Runtime:**
+- Instancia única por aplicación JVM mediante `Runtime.getRuntime()`
+- Propósito: Interacción con el entorno de ejecución del sistema operativo
+- Método principal: `exec()` para ejecutar comandos externos
+
+**Ejemplos de uso:**
+```java
+// Ejecución básica sin parámetros
+Runtime.getRuntime().exec("Notepad.exe");
+
+// Con parámetros como array
+String[] comando = {"Notepad.exe", "archivo.txt"};
+Process proceso = Runtime.getRuntime().exec(comando);
+
+// Con gestión y espera
+int resultado = proceso.waitFor();
+System.out.println("Proceso terminó con código: " + resultado);
+```
 
 **Clase Runtime:**
 - Instancia única por aplicación JVM
@@ -315,3 +337,34 @@ int resultado = proceso.waitFor();
 ✅ Procesamiento completado con éxito
 ✅ Proceso se completó satisfactoriamente
 ➡️ Ejecutando siguiente proceso en cadena...
+
+# 1.3.2 CREACIÓN DE PROCESOS CON PROCESSBUILDER
+
+## 📗 RESUMEN DETALLADO (Parte importante) + TABLA
+
+**Clase ProcessBuilder:**
+- Alternativa más flexible que Runtime
+- Permite configurar proceso antes de ejecutarlo
+- Método `start()` inicia la ejecución
+
+**Características avanzadas:**
+- Configuración de directorio de trabajo
+- Acceso al entorno de ejecución
+- Redirección de flujos de entrada/salida
+- Reutilización para múltiples procesos
+
+**Ejemplos de uso:**
+```java
+// Creación básica
+Process proceso = new ProcessBuilder("Notepad.exe", "datos.txt").start();
+
+// Con configuración de directorio
+ProcessBuilder pb = new ProcessBuilder("Notepad.exe", "datos.txt");
+pb.directory(new File("/ruta/directorio/"));
+Process proceso = pb.start();
+
+// Múltiples procesos desde misma instancia
+ProcessBuilder pb = new ProcessBuilder("Notepad.exe");
+for (int i = 0; i < 5; i++) {
+    pb.start(); // Crea 5 instancias de Notepad
+}
