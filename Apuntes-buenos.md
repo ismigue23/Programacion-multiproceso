@@ -280,6 +280,13 @@ Coordinación de ejecución de procesos según sus resultados.
 
 **Ejemplo flujo:**
 
+**Explicación:**
+- **PROCESO 1** se ejecuta primero
+- Si termina con **código 0** → ejecuta **PROCESO 1.1**
+  - Si 1.1 termina con **código 0** → ejecuta **PROCESO 1.1.1**
+  - Si 1.1 termina con **código 1** → ejecuta **PROCESO 1.1.2**
+- Si termina con **código 1** → ejecuta **PROCESO 1.2**
+  - Cuando 1.2 finalice (cualquier código) → ejecuta **PROCESO 1.2.1**
 ---
 
 # 1.3.1 CREACIÓN DE PROCESOS CON RUNTIME
