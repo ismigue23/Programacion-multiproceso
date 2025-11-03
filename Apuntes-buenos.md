@@ -313,6 +313,15 @@ Process proceso = Runtime.getRuntime().exec(comando);
 int resultado = proceso.waitFor();
 System.out.println("Proceso terminó con código: " + resultado);
 ```
+| Método | Descripción |
+|--------|-------------|
+| `destroy()` | Termina forzosamente el proceso |
+| `exitValue()` | Devuelve valor de retorno del proceso |
+| `getErrorStream()` | Obtiene flujo de salida de error |
+| `getInputStream()` | Obtiene flujo de salida estándar |
+| `getOutputStream()` | Obtiene flujo de entrada estándar |
+| `isAlive()` | Verifica si el proceso está activo |
+| `waitFor()` | Espera a que el proceso termine |
 # 1.3.2 CREACIÓN DE PROCESOS CON PROCESSBUILDER
 
 ## 📗 RESUMEN DETALLADO (Parte importante) + TABLA
