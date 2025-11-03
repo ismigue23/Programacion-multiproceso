@@ -295,7 +295,6 @@ La sincronización permite coordinar la ejecución de procesos según sus result
 
 # 1.3.1 CREACIÓN DE PROCESOS CON RUNTIME
 
-## 📗 RESUMEN DETALLADO (Parte importante) + TABLA
 **Clase Runtime:**
 - Instancia única por aplicación JVM mediante `Runtime.getRuntime()`
 - Propósito: Interacción con el entorno de ejecución del sistema operativo
@@ -314,34 +313,9 @@ Process proceso = Runtime.getRuntime().exec(comando);
 int resultado = proceso.waitFor();
 System.out.println("Proceso terminó con código: " + resultado);
 ```
-
-**Clase Runtime:**
-- Instancia única por aplicación JVM
-- Acceso: `Runtime.getRuntime()`
-- Propósito: Interacción con entorno de ejecución
-
-**Ejemplos de uso:**
-```java
-// Ejecución básica
-Runtime.getRuntime().exec("Notepad.exe");
-
-// Con parámetros
-String[] comando = {"Notepad.exe", "archivo.txt"};
-Process proceso = Runtime.getRuntime().exec(comando);
-
-// Con gestión
-int resultado = proceso.waitFor();
-```
-🔄 Iniciando proceso secundario...
-🚀 Proceso secundario ejecutándose...
-✅ Procesamiento completado con éxito
-✅ Proceso se completó satisfactoriamente
-➡️ Ejecutando siguiente proceso en cadena...
-
 # 1.3.2 CREACIÓN DE PROCESOS CON PROCESSBUILDER
 
 ## 📗 RESUMEN DETALLADO (Parte importante) + TABLA
-
 **Clase ProcessBuilder:**
 - Alternativa más flexible que Runtime
 - Permite configurar proceso antes de ejecutarlo
@@ -368,3 +342,15 @@ ProcessBuilder pb = new ProcessBuilder("Notepad.exe");
 for (int i = 0; i < 5; i++) {
     pb.start(); // Crea 5 instancias de Notepad
 }
+```
+### 📋 TABLA 1.3 - MÉTODOS PRINCIPALES DE PROCESSBUILDER
+
+| Método | Descripción |
+|--------|-------------|
+| `start()` | Inicia nuevo proceso con atributos configurados |
+| `command()` | Get/Set del programa y argumentos |
+| `directory()` | Get/Set del directorio de trabajo |
+| `environment()` | Obtiene variables de entorno del proceso |
+| `redirectError()` | Configura destino de salida de errores |
+| `redirectInput()` | Configura origen de entrada estándar |
+| `redirectOutput()` | Configura destino de salida estándar |
