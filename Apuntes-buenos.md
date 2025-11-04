@@ -24,6 +24,7 @@
 La multitarea es la capacidad de ejecutar múltiples tareas simultáneamente. Sistemas antiguos como MS-DOS eran monotarea, mientras que UNIX ya implementaba multitarea.
 La multitarea puede ser real (hay tantas unidades de proceso como procesos a ejecutar) o simulada (hay menos unidades de proceso que procesos a ejecutar).
 
+
 ---
 
 # 1.1.1 EL PROCESADOR
@@ -35,7 +36,7 @@ El procesador ejecuta instrucciones de programas. Puede tener uno o varios núcl
 - **Núcleo**: Unidad de procesamiento independiente dentro del CPU
 - **Multitarea mononúcleo**: Se logra mediante concurrencia (alternancia rápida)
 - **Multitarea multinúcleo**: Paralelismo real con ejecución simultánea
-- **Punto clave**: Un procesador mononúcleo SÍ puede realizar multitarea mediante planificación del SO
+- **Puntos claves**: Un procesador mononúcleo SÍ puede realizar multitarea mediante planificación del SO. La multitarea depende más del SO que del procesador. Un procesador simple con SO adecuado puede tener multitarea, mientras que un multicore con SO inadecuado no aprovechará los recursos.
 
 ---
 
@@ -62,6 +63,8 @@ El procesador ejecuta instrucciones de programas. Puede tener uno o varios núcl
 - Ventajas: Multiplataforma
 - Desventajas: Menor rendimiento
 
+**Optimización:** Los lenguajes interpretados usan técnicas de optimización (caché de bytecode) para no repetir el análisis del código en sucesivas ejecuciones.
+
 **Máquina Virtual (Java):**
 - Código → Bytecode → JVM → Ejecución
 - Ventajas: "Write Once, Run Anywhere"
@@ -80,12 +83,15 @@ El procesador ejecuta instrucciones de programas. Puede tener uno o varios núcl
 | **Proceso** | Programa en ejecución | Word abierto |
 | **Servicio** | Programa en segundo plano | Antivirus |
 
+**Nota importante:** En programas interpretados (Python/Java), el proceso listado en el SO es el del intérprete/JVM, no el nombre del programa.
+
 **Flujo de creación:**
 Programador → Código → Compilador → Ejecutable → Usuario → Proceso
 
 **Proceso vs Servicio:**
 - **Proceso**: Interactivo, iniciado por usuario, tiempo limitado
-- **Servicio**: Automático, sin interfaz, siempre activo
+- **Servicio**: Automático, sin interfaz, siempre activo, se arranca automáticamente por el SO
+
 
 ---
 
@@ -147,8 +153,7 @@ Hilo = unidad de ejecución dentro de un proceso. Programas pueden ser monohilo 
 # 1.1.7 BIFURCACIÓN O FORK
 
 ## 📘 RESUMEN CORTO (Solo leer, pero entender código)
-Fork crea copia exacta de un proceso. Original = "padre", copia = "hijo". Cada uno tiene PID diferente y memoria independiente.
-
+Fork crea copia exacta de un proceso. Original = "padre", copia = "hijo". Cada uno tiene PID diferente y memoria independiente. **Ambos procesos continúan ejecución desde el punto del fork() con su propia memoria.**
 ### Código C a entender:
 ```c
 #include <stdio.h>
@@ -177,6 +182,7 @@ Antes de fork: 0
 PADRE - Contador: 2
 HIJO - Contador: 2
 
+**Framework Java:** Existe ForkJoin framework desde Java 7 para procesamiento paralelo.
 ---
 
 # 1.2 PROCESOS: CONCEPTOS TEÓRICOS
@@ -208,6 +214,7 @@ HIJO - Contador: 2
 # 1.2.1 GESTIÓN Y ESTADOS DE LOS PROCESOS
 
 ## 📗 RESUMEN DETALLADO (Parte importante)
+**Objetivo del planificador:** Conseguir que todos los procesos terminen lo antes posible aprovechando al máximo los recursos del sistema.
 
 **Diagrama de Estados:**                 
 **Planificador de Procesos:**
@@ -276,6 +283,7 @@ La sincronización permite coordinar la ejecución de procesos según sus result
 | Ejecución | Runtime | exec() | Ejecuta comando sistema |
 | Ejecución | ProcessBuilder | start() | Crea y ejecuta proceso |
 | Espera | Process | waitFor() | Espera fin del proceso |
+| Obtención código | Process | exitValue() | Devuelve código sin esperar (solo si proceso terminó) |
 | Generación código | System | exit(valor) | Termina con código |
 | Obtención código | Process | waitFor() | Devuelve código salida |
 
@@ -316,7 +324,7 @@ System.out.println("Proceso terminó con código: " + resultado);
 | `exitValue()` | Devuelve valor de retorno del proceso |
 | `getErrorStream()` | Obtiene flujo de salida de error |
 | `getInputStream()` | Obtiene flujo de salida estándar |
-| `getOutputStream()` | Obtiene flujo de entrada estándar |
+| `getOutputStream()` | Proporciona OutputStream hacia la entrada estándar (stdin) del proceso |
 | `isAlive()` | Verifica si el proceso está activo |
 | `waitFor()` | Espera a que el proceso termine |
 # 1.3.2 CREACIÓN DE PROCESOS CON PROCESSBUILDER
