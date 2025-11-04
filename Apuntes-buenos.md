@@ -209,19 +209,6 @@ HIJO - Contador: 2
 
 ## 📗 RESUMEN DETALLADO (Parte importante)
 
-**Planificador de Procesos:**
-- Componente del SO que gestiona asignación de CPU
-- Objetivos: maximizar rendimiento, equidad, minimizar tiempos
-
-**Estados de Procesos:**
-| Estado | Descripción |
-|--------|-------------|
-| **Nuevo** | Recién creado |
-| **Listo** | En memoria, esperando CPU |
-| **En ejecución** | Usando CPU |
-| **Bloqueado** | Esperando evento externo |
-| **Finalizado** | Terminado, recursos liberados |
-
 **Diagrama de Estados:**                 
 **Planificador de Procesos:**
 - Componente del SO que gestiona asignación de CPU
