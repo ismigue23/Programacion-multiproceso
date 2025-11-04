@@ -223,9 +223,31 @@ HIJO - Contador: 2
 | **Finalizado** | Terminado, recursos liberados |
 
 **Diagrama de Estados:**
++---------+   +---------+   +-------------+
+|  Nuevo  |-->|  Listo  |<->| En ejecución |
++---------+   +---------+   +-------------+
+                    |            |
+                    |            |
+                    v            v
+             +-------------+  +-----------+
+             | Bloqueado   |  | Finalizado |
+             +-------------+  +-----------+
 
 **Fenómeno Lag:** Pausas momentáneas por sobrecarga del sistema
 
+**Algoritmos de Planificación:**
+- **FCFS (First-Come, First-Served)**: El primero en llegar es el primero en ser atendido.
+- **Round Robin**: Asigna un quantum de tiempo a cada proceso en forma circular.
+- **SJF (Shortest Job First)**: Prioriza los procesos más cortos.
+- **Por Prioridades**: Asigna prioridades a los procesos.
+
+**Tabla Comparativa de Algoritmos:**
+| Algoritmo | Ventajas | Desventajas |
+|-----------|----------|-------------|
+| **FCFS** | Simple, justo | Convoy effect (procesos largos retrasan a los cortos) |
+| **Round Robin** | Respuesta rápida para procesos cortos | Overhead por cambios de contexto |
+| **SJF** | Minimiza tiempo promedio de espera | Difícil predecir duración de procesos |
+| **Prioridades** | Urgencia de procesos | Inanición (procesos de baja prioridad nunca se ejecutan) |
 ---
 
 # 1.2.2 COMUNICACIÓN ENTRE PROCESOS
