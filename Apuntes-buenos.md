@@ -22,6 +22,7 @@
 
 ## 📘 RESUMEN CORTO (Solo leer)
 La multitarea es la capacidad de ejecutar múltiples tareas simultáneamente. Sistemas antiguos como MS-DOS eran monotarea, mientras que UNIX ya implementaba multitarea.
+La multitarea puede ser real (hay tantas unidades de proceso como procesos a ejecutar) o simulada (hay menos unidades de proceso que procesos a ejecutar).
 
 ---
 
