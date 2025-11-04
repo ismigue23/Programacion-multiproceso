@@ -282,7 +282,35 @@ HIJO - Contador: 2
 5. **Servicios Web**
    - HTTP, REST, APIs, Cloud
    - Altamente escalable
+### 📊 TABLA COMPARATIVA DETALLADA IPC
 
+| Método | Velocidad | Complejidad | Escalabilidad | Caso de Uso Ideal |
+|--------|-----------|-------------|---------------|-------------------|
+| **Sockets TCP** | Alta | Media | Alta | Cliente-Servidor, Comunicación en red |
+| **Sockets UDP** | Muy Alta | Baja | Alta | Streaming, Juegos en tiempo real |
+| **Pipes** | Muy Alta | Baja | Baja | Procesos padre-hijo, Comandos shell |
+| **Memoria Compartida** | Máxima | Alta | Media | Aplicaciones científicas, DBMS |
+| **Colas de Mensajes** | Alta | Media | Alta | Sistemas empresariales, Microservicios |
+| **RPC/RMI** | Media | Alta | Media | Sistemas distribuidos, Java EE |
+| **Archivos** | Baja | Baja | Media | Logs, Configuración, Backup |
+
+### 💻 EJEMPLOS PRÁCTICOS DE IMPLEMENTACIÓN
+
+#### 🔌 Ejemplo Sockets - Servidor Básico
+```java
+// ServidorSocket.java
+public class ServidorSocket {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8080);
+        System.out.println("Servidor escuchando en puerto 8080...");
+        
+        while (true) {
+            Socket cliente = serverSocket.accept();
+            new Thread(new ManejadorCliente(cliente)).start();
+        }
+    }
+}
+```
 ---
 
 # 1.2.3 SINCRONIZACIÓN ENTRE PROCESOS
