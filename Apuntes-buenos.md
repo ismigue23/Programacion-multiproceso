@@ -268,20 +268,35 @@ int main(void) {
 ## 📗 RESUMEN DETALLADO (Parte importante)
 **Objetivo del planificador:** Conseguir que todos los procesos terminen lo antes posible aprovechando al máximo los recursos del sistema.
 
-**Diagrama de Estados:**                 
 **Planificador de Procesos:**
 - Componente del SO que gestiona asignación de CPU
 - Objetivos: maximizar rendimiento, equidad, minimizar tiempos
+- Funciona como un "responsable de almacén" de recursos limitados
 
+### 🔄 DIAGRAMA DE ESTADOS DE PROCESOS
+
+[NUEVO] → [LISTO] ↔ [EN EJECUCIÓN] → [FINALIZADO]
+                ↑         ↓
+                └── [BLOQUEADO] ←──┘
+                
 **Estados de Procesos:**
 | Estado | Descripción |
 |--------|-------------|
-| **Nuevo** | Recién creado |
-| **Listo** | En memoria, esperando CPU |
-| **En ejecución** | Usando CPU |
-| **Bloqueado** | Esperando evento externo |
-| **Finalizado** | Terminado, recursos liberados |
-**Fenómeno Lag:** Pausas momentáneas por sobrecarga del sistema
+| **Nuevo** | Proceso recién creado |
+| **Listo** | En memoria, esperando CPU (listo para ejecutar) |
+| **En ejecución** | Actualmente usando CPU |
+| **Bloqueado** | Esperando evento externo (E/S, recurso) |
+| **Finalizado** | Proceso terminado, recursos liberados |
+
+**Transiciones clave:**
+- **Listo → Ejecución**: Planificador asigna CPU
+- **Ejecución → Listo**: Time-out o interrupción
+- **Ejecución → Bloqueado**: Espera por recurso/E/S
+- **Bloqueado → Listo**: Recurso disponible
+
+**Fenómeno Lag:** Pausas momentáneas por sobrecarga del sistema cuando una tarea acapara recursos temporalmente
+
+**Recordatorio:** Ni el programador ni el usuario controlan los estados - es responsabilidad exclusiva del planificador del SO.
 ---
 
 # 1.2.2 COMUNICACIÓN ENTRE PROCESOS
