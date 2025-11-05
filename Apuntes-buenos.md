@@ -154,33 +154,85 @@ Hilo = unidad de ejecución dentro de un proceso. Programas pueden ser monohilo 
 
 ## 📘 RESUMEN CORTO (Solo leer, pero entender código)
 Fork crea copia exacta de un proceso. Original = "padre", copia = "hijo". Cada uno tiene PID diferente y memoria independiente. **Ambos procesos continúan ejecución desde el punto del fork() con su propia memoria.**
-### Código C a entender:
+
+### 🎯 PUNTOS CLAVE DEL CÓDIGO C
+
 ```c
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/types.h>
 
-int main() {
+int main(void) {
     int contador = 0;
-    printf("Antes de fork: %d\n", contador);
+    printf("Comenzando la ejecución\n");
+    
+    pid_t idHijo;
+    pid_t idPadre;
+    idPadre = getpid();
+    
+    printf("Antes de bifurcar\n");
     contador++;
     
-    pid_t idHijo = fork();  // Punto crítico
+    idHijo = fork();  // ⚡ PUNTO CRÍTICO - SE CREA LA BIFURCACIÓN
     
-    contador++;  // Ambos procesos ejecutan esta línea
+    contador++;  // 🔄 AMBOS PROCESOS EJECUTAN ESTA LÍNEA
+    
+    printf("Después de bifurcar\n");
     
     if (idHijo == 0) {
-        printf("HIJO - Contador: %d\n", contador);
+        printf("Id. hijo:%ld Id. padre:%ld Contador:%d \n", 
+               (long)getpid(), (long)idPadre, contador);
     } else {
-        printf("PADRE - Contador: %d\n", contador);
+        printf("Id. padre:%ld Id. hijo:%ld Contador:%d \n", 
+               (long)getpid(), (long)idHijo, contador);
     }
     return 0;
-}  
-```  
+}
+```
+### 🔍 EXPLICACIÓN PASO A PASO
 
-**Salida:**
-Antes de fork: 0
-PADRE - Contador: 2
-HIJO - Contador: 2
+**Líneas 1-3: INCLUSIÓN DE BIBLIOTECAS**
+- `stdio.h`: Para funciones de entrada/salida como printf
+- `unistd.h`: Para la función fork()
+- `sys/types.h`: Para el tipo de dato pid_t
+
+**Líneas 5-9: INICIALIZACIÓN**
+- Se declara `contador = 0`
+- Se muestra "Comenzando la ejecución" (SOLO UNA VEZ)
+- Se declaran variables para almacenar PIDs
+- Se obtiene el PID del proceso padre con `getpid()`
+
+**Líneas 11-13: ANTES DEL FORK**
+- Se muestra "Antes de bifurcar" (SOLO UNA VEZ)
+- Se incrementa `contador` a 1 (SOLO UNA VEZ)
+
+**Línea 15: PUNTO DE BIFURCACIÓN**
+- `fork()` crea una copia exacta del proceso
+- A partir de aquí existen DOS procesos independientes
+- **Padre**: `idHijo` recibe el PID del proceso hijo
+- **Hijo**: `idHijo` recibe 0
+
+**Líneas 17-19: DESPUÉS DEL FORK**
+- `contador++` se ejecuta en AMBOS procesos
+- `printf("Después de bifurcar")` se ejecuta DOS veces
+- Cada proceso tiene su propia copia de `contador`
+
+**Líneas 21-27: IDENTIFICACIÓN DE PROCESOS**
+- `if (idHijo == 0)`: El hijo ejecuta este bloque
+- `else`: El padre ejecuta este bloque
+- Cada proceso muestra sus PIDs y el valor de su `contador`
+
+### 📊 SALIDA COMPLETA Y EXPLICADA
+Comenzando la ejecución ← SOLO UNA VEZ (antes de fork)
+Antes de bifurcar ← SOLO UNA VEZ (antes de fork)
+Después de bifurcar ← PRIMERA vez (proceso padre)
+Después de bifurcar ← SEGUNDA vez (proceso hijo)
+Id. padre:143 Id. hijo:144 Contador:2 ← Proceso PADRE
+Id. hijo:144 Id. padre:143 Contador:2 ← Proceso HIJO
+
+**¿Por qué contador = 2 en ambos procesos?**
+- **Proceso Padre**: contador = 1 → fork() → contador++ → contador = 2
+- **Proceso Hijo**: hereda contador = 1 → contador++ → contador = 2
 
 **Framework Java:** Existe ForkJoin framework desde Java 7 para procesamiento paralelo.
 ---
