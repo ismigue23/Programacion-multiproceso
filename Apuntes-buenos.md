@@ -305,30 +305,41 @@ int main(void) {
 
 **IPC (Inter-Process Communication):** Mecanismos para que procesos intercambien información.
 
-**Métodos de IPC:**
+### 🔄 MÉTODOS DE IPC
 
-1. **Sockets**
-   - Comunicación entre máquinas diferentes
-   - Bidireccional, bajo nivel
-   - Ejemplo: Cliente-Servidor
+**1. Sockets**
+- Comunicación entre máquinas diferentes
+- Bidireccional, bajo nivel
+- Ejemplo: Cliente-Servidor
+- **Ventaja:** Procesos en distintos ordenadores y lenguajes
 
-2. **Flujos E/S**
-   - Redirección stdin/stdout/stderr
-   - Procesos deben estar relacionados
-   - Ejemplo: `proceso1 | proceso2`
+**2. Flujos E/S (Entrada/Salida)**
+- Redirección stdin/stdout/stderr
+- **Requisito:** Procesos deben estar relacionados (uno creó al otro)
+- Ejemplo: `proceso1 | proceso2` en terminal
 
-3. **RPC/RMI**
-   - Llamadas a procedimientos/métodos remotos
-   - Transparencia de ubicación
-   - Ejemplo: Java RMI
+**3. RPC/RMI**
+- **RPC:** Llamadas a procedimientos remotos (genérico)
+- **RMI:** Equivalente en Java, orientado a objetos
+- Transparencia de ubicación (no importa dónde esté el proceso)
+- **Ventaja:** El proceso llamante no sabe la ubicación del proceso llamado
 
-4. **Sistemas de Persistencia**
-   - Archivos, bases de datos compartidas
-   - Sencillo pero menos eficiente
+**4. Sistemas de Persistencia**
+- Archivos, bases de datos compartidas
+- Sencillo pero menos eficiente
+- **Ventaja:** Solución simple para múltiples escenarios
 
-5. **Servicios Web**
-   - HTTP, REST, APIs, Cloud
-   - Altamente escalable
+**5. Servicios Web/Internet**
+- HTTP, REST, APIs, Cloud
+- FTP para transferencia de archivos
+- Altamente escalable
+- **Ventaja:** Utiliza infraestructura existente de internet
+
+### 🎯 CARACTERÍSTICAS CLAVE
+
+- **Procesos son elementos estancos:** Cada uno tiene su propia memoria, CPU y registros
+- **Necesidad de comunicación:** Surgen dependencias naturales entre procesos para E/S de datos
+- **Flexibilidad:** Algunos métodos funcionan entre procesos en distintas máquinas (Sockets, RPC, Servicios Web)
 ---
 
 # 1.2.3 SINCRONIZACIÓN ENTRE PROCESOS
@@ -338,33 +349,50 @@ int main(void) {
 La sincronización permite coordinar la ejecución de procesos según sus resultados y códigos de terminación. Es esencial para construir flujos de trabajo donde la ejecución de un proceso depende del resultado de otro.
 
 **Mecanismos necesarios:**
-- Ejecución de procesos desde otros procesos
-- Espera de finalización 
-- Generación y obtención de códigos de terminación
-- Toma de decisiones basada en resultados
+- **Ejecución**: Lanzar procesos desde otros procesos
+- **Espera**: Bloquear ejecución hasta que otro proceso termine  
+- **Generación de códigos**: Indicar cómo terminó la ejecución
+- **Obtención de códigos**: Leer el resultado de otros procesos
 
-### 📋 TABLA 1.1 - MECANISMOS JAVA
+### 📋 TABLA 1.1 - MECANISMOS JAVA PARA SINCRONIZACIÓN
 
 | Mecanismo | Clase | Método | Descripción |
 |-----------|-------|--------|-------------|
-| Ejecución | Runtime | exec() | Ejecuta comando sistema |
-| Ejecución | ProcessBuilder | start() | Crea y ejecuta proceso |
-| Espera | Process | waitFor() | Espera fin del proceso |
-| Obtención código | Process | exitValue() | Devuelve código sin esperar (solo si proceso terminó) |
-| Generación código | System | exit(valor) | Termina con código |
-| Obtención código | Process | waitFor() | Devuelve código salida |
+| Ejecución | Runtime | exec() | Ejecuta comando del sistema operativo |
+| Ejecución | ProcessBuilder | start() | Crea y ejecuta proceso con más control |
+| Espera | Process | waitFor() | Espera a que el proceso termine (bloqueante) |
+| Generación código | System | exit(valor) | Termina la JVM con código de retorno |
+| Obtención código | Process | exitValue() | Devuelve código de salida (no espera) |
+| Obtención código | Process | waitFor() | Devuelve código de salida (espera primero) |
 
-**Ejemplo flujo:**
+### 🔄 EJEMPLO DE FLUJO DE SINCRONIZACIÓN
 
-**Explicación:**
+- PROCESO 1
+- ↓
+- ├─ Si código = 0 → PROCESO 1.1 → Si código = 0 → PROCESO 1.1.1
+- │ └→ Si código = 1 → PROCESO 1.1.2
+- │
+- └─ Si código = 1 → PROCESO 1.2 → (cualquier código) → PROCESO 1.2.1
+- 
+**Explicación del flujo:**
 - **PROCESO 1** se ejecuta primero
 - Si termina con **código 0** → ejecuta **PROCESO 1.1**
   - Si 1.1 termina con **código 0** → ejecuta **PROCESO 1.1.1**
   - Si 1.1 termina con **código 1** → ejecuta **PROCESO 1.1.2**
 - Si termina con **código 1** → ejecuta **PROCESO 1.2**
   - Cuando 1.2 finalice (cualquier código) → ejecuta **PROCESO 1.2.1**
----
 
+### 💡 APLICACIÓN PRÁCTICA
+
+**Manual de Explotación:** Documento que debe recoger los códigos de finalización de los procesos junto con su descripción, permitiendo construir flujos de trabajo automatizados.
+
+**Ejemplo de códigos:**
+- `0`: Proceso completado correctamente
+- `1`: Error de conexión a base de datos
+- `2`: Archivo de entrada no encontrado
+- `3`: Error de permisos
+- `4`: Timeout en operación
+---
 # 1.3.1 CREACIÓN DE PROCESOS CON RUNTIME
 
 **Clase Runtime:**
@@ -374,10 +402,10 @@ La sincronización permite coordinar la ejecución de procesos según sus result
 
 **Ejemplos de uso:**
 ```java
-// Ejecución básica sin parámetros
+// Ejecutar Notepad en Windows
 Runtime.getRuntime().exec("Notepad.exe");
 
-// Con parámetros como array
+// Con parámetros en array
 String[] comando = {"Notepad.exe", "archivo.txt"};
 Process proceso = Runtime.getRuntime().exec(comando);
 
@@ -389,14 +417,16 @@ System.out.println("Proceso terminó con código: " + resultado);
 |--------|-------------|
 | `destroy()` | Termina forzosamente el proceso |
 | `exitValue()` | Devuelve valor de retorno del proceso |
-| `getErrorStream()` | Obtiene flujo de salida de error |
-| `getInputStream()` | Obtiene flujo de salida estándar |
+| `getErrorStream()` | Obtiene InputStream de la salida de error |
+| `getInputStream()` | Obtiene InputStream de la salida estándar |
 | `getOutputStream()` | Proporciona OutputStream hacia la entrada estándar (stdin) del proceso |
 | `isAlive()` | Verifica si el proceso está activo |
 | `waitFor()` | Espera a que el proceso termine |
+
 # 1.3.2 CREACIÓN DE PROCESOS CON PROCESSBUILDER
 
 ## 📗 RESUMEN DETALLADO (Parte importante) + TABLA
+
 **Clase ProcessBuilder:**
 - Alternativa más flexible que Runtime
 - Permite configurar proceso antes de ejecutarlo
@@ -423,6 +453,11 @@ ProcessBuilder pb = new ProcessBuilder("Notepad.exe");
 for (int i = 0; i < 5; i++) {
     pb.start(); // Crea 5 instancias de Notepad
 }
+
+// Acceso a variables de entorno
+ProcessBuilder pb = new ProcessBuilder("Notepad.exe");
+java.util.Map<String, String> env = pb.environment();
+System.out.println("Número de procesadores: " + env.get("NUMBER_OF_PROCESSORS"));
 ```
 ### 📋 TABLA 1.3 - MÉTODOS PRINCIPALES DE PROCESSBUILDER
 
@@ -435,3 +470,9 @@ for (int i = 0; i < 5; i++) {
 | `redirectError()` | Configura destino de salida de errores |
 | `redirectInput()` | Configura origen de entrada estándar |
 | `redirectOutput()` | Configura destino de salida estándar |
+
+**Ventajas sobre Runtime:**
+- Mayor control sobre la configuración del proceso
+- Reutilización de instancias para múltiples procesos
+- Redirección flexible de flujos
+- Acceso al entorno de ejecución
