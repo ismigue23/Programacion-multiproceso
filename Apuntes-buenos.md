@@ -223,12 +223,12 @@ int main(void) {
 - Cada proceso muestra sus PIDs y el valor de su `contador`
 
 ### 📊 SALIDA COMPLETA Y EXPLICADA
-Comenzando la ejecución ← SOLO UNA VEZ (antes de fork)
-Antes de bifurcar ← SOLO UNA VEZ (antes de fork)
-Después de bifurcar ← PRIMERA vez (proceso padre)
-Después de bifurcar ← SEGUNDA vez (proceso hijo)
-Id. padre:143 Id. hijo:144 Contador:2 ← Proceso PADRE
-Id. hijo:144 Id. padre:143 Contador:2 ← Proceso HIJO
+- Comenzando la ejecución ← SOLO UNA VEZ (antes de fork)
+- Antes de bifurcar ← SOLO UNA VEZ (antes de fork)
+- Después de bifurcar ← PRIMERA vez (proceso padre)
+- Después de bifurcar ← SEGUNDA vez (proceso hijo)
+- Id. padre:143 Id. hijo:144 Contador:2 ← Proceso PADRE
+- Id. hijo:144 Id. padre:143 Contador:2 ← Proceso HIJO
 
 **¿Por qué contador = 2 en ambos procesos?**
 - **Proceso Padre**: contador = 1 → fork() → contador++ → contador = 2
