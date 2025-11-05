@@ -275,7 +275,7 @@ int main(void) {
 
 ### 🔄 DIAGRAMA DE ESTADOS DE PROCESOS
 
-[NUEVO] → [LISTO] ↔ [EN EJECUCIÓN] → [FINALIZADO]
+- [NUEVO] → [LISTO] ↔ [EN EJECUCIÓN] → [FINALIZADO]
                 ↑         ↓
                 └── [BLOQUEADO] ←──┘
                 
